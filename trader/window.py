@@ -1,18 +1,8 @@
 import psutil
 import logging
 from chartItem import *
-from query import Query
-from sound import Sound
 from PyQt5 import QtCore
-from worker import Worker
 from PyQt5 import QtWidgets
-from telegrammsg import TelegramMsg
-from updater_hoga import UpdaterHoga
-from updater_chart import UpdaterChart
-from strategy_tick import StrategyTick
-from strategy_long import StrategyLong
-from strategy_mid import StrategyMid
-from strategy_short import StrategyShort
 from PyQt5.QtGui import QIcon, QPixmap, QPalette
 from multiprocessing import Process, Queue
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -2090,11 +2080,27 @@ class Writer(QtCore.QThread):
 
 
 if __name__ == '__main__':
-    windowQ, workerQ, stgtQ, stglQ, stgmQ, stgsQ, soundQ, queryQ, teleQ, hoga1Q, hoga2Q, chart1Q, chart2Q, chart3Q, chart4Q, \
-        chart5Q, chart6Q, chart7Q, chart8Q, chart9Q = Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), \
-        Queue(), Queue(),  Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue()
+    windowQ, workerQ, stgtQ, stglQ, stgmQ, stgsQ, soundQ, queryQ, teleQ, hoga1Q, hoga2Q, chart1Q, chart2Q, chart3Q,\
+        chart4Q, chart5Q, chart6Q, chart7Q, chart8Q, chart9Q = Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), \
+        Queue(), Queue(), Queue(),  Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), Queue(), \
+        Queue(), Queue()
+
     qlist = [windowQ, workerQ, stgtQ, stglQ, stgmQ, stgsQ, soundQ, queryQ, teleQ, hoga1Q, hoga2Q,
              chart1Q, chart2Q, chart3Q, chart4Q, chart5Q, chart6Q, chart7Q, chart8Q, chart9Q]
+
+    from query import Query
+    from sound import Sound
+    from worker import Worker
+    from telegrammsg import TelegramMsg
+    from updater_hoga import UpdaterHoga
+    from updater_chart import UpdaterChart
+    from strategy_tick import StrategyTick
+    """
+    단기, 중기, 장기 전략 완성 후 활성화
+    from strategy_long import StrategyLong
+    from strategy_mid import StrategyMid
+    from strategy_short import StrategyShort
+    """
 
     Process(target=Sound, args=(qlist,), daemon=True).start()
     Process(target=Query, args=(qlist,), daemon=True).start()
