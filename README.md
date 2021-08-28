@@ -64,13 +64,13 @@
 
 <설정방법>
 
-기본 환경은 miniconda 32bit python 3.9버전입니다.
+- 기본 환경은 miniconda 32bit python 3.9버전입니다.
 
-https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Windows-x86.exe
+- https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Windows-x86.exe
 
-미니콘다 환경에서 추가로 설치할 라이브러리는 다음과 같습니다.
+- 미니콘다 환경에서 추가로 설치할 라이브러리는 다음과 같습니다.
 
-pip install psutil pyqt5 pandas pyttsx3 pyqtgraph matplotlib BeautifulSoup4 lxml python-telegram-bot
+- pip install psutil pyqt5 pandas pyttsx3 pyqtgraph matplotlib BeautifulSoup4 lxml python-telegram-bot
 
 1. login/user.txt 파일에 계정 두개 설정
 
