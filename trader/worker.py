@@ -1095,8 +1095,8 @@ class Worker:
                         self.UpdateViPrice(code, c)
                     if code in self.list_gsjm:
                         injango = True if code in self.dict_df['잔고목록'].index else False
-                        vitimedown = True if now() < timedelta_sec(180, self.dict_vipr[code][1]) else False
-                        vid5priceup = True if c >= self.dict_vipr[code][2] - self.GetHogaunit(code, c) * 5 else False
+                        vitimedown = True if now() < self.dict_vipr[code][2] else False
+                        vid5priceup = True if c >= self.dict_vipr[code][5] else False
                         self.stgtQ.put([code, name, c, o, h, low, per, ch, dm, vp, d,
                                         injango, vitimedown, vid5priceup, self.dict_intg['단타투자금액']])
                 """
@@ -1231,21 +1231,22 @@ class Worker:
             self.chart9Q.put([d, c, v])
 
     def InsertViPrice(self, code, o):
-        uvi, dvi = self.GetVIPrice(code, o)
-        self.dict_vipr[code] = [True, timedelta_sec(-180), uvi, dvi]
+        uvi, dvi, uvid5 = self.GetVIPrice(code, o)
+        self.dict_vipr[code] = [True, timedelta_sec(-180), timedelta_sec(-180), uvi, dvi, uvid5]
 
     def GetVIPrice(self, code, std_price):
         uvi = std_price * 1.1
         x = self.GetHogaunit(code, uvi)
         if uvi % x != 0:
             uvi = uvi + (x - uvi % x)
+        uvid5 = uvi - x * 5
 
         dvi = std_price * 0.9
         x = self.GetHogaunit(code, dvi)
         if dvi % x != 0:
             dvi = dvi - dvi % x
 
-        return int(uvi), int(dvi)
+        return int(uvi), int(dvi), int(uvid5)
 
     def GetHogaunit(self, code, price):
         if price < 1000:
@@ -1269,15 +1270,14 @@ class Worker:
     def UpdateViPrice(self, code, key):
         if type(key) == str:
             try:
-                self.dict_vipr[code][0] = False
-                self.dict_vipr[code][1] = timedelta_sec(5)
+                self.dict_vipr[code][:3] = False, timedelta_sec(5), timedelta_sec(180)
             except KeyError:
-                self.dict_vipr[code] = [False, timedelta_sec(5), 0, 0]
+                self.dict_vipr[code] = [False, timedelta_sec(5), timedelta_sec(180), 0, 0, 0]
             self.windowQ.put([1, f'변동성 완화 장치 발동 - [{code}] {key}'])
             self.workerQ.put([sn_vijc, code, '10;12;14;30;228', 1])
         elif type(key) == int:
-            uvi, dvi = self.GetVIPrice(code, key)
-            self.dict_vipr[code] = [True, timedelta_sec(5), uvi, dvi]
+            uvi, dvi, uvid5 = self.GetVIPrice(code, key)
+            self.dict_vipr[code] = [True, now(), timedelta_sec(180), uvi, dvi, uvid5]
             self.workerQ.put([sn_vijc, code])
 
     def UpdateJango(self, code, name, c, o, h, low, per, ch):
@@ -1336,7 +1336,7 @@ class Worker:
 
     def UpdateHogajango(self, gubun, code, name, c, o, h, low, prec):
         try:
-            uvi, dvi = self.dict_vipr[code][2:]
+            uvi, dvi = self.dict_vipr[code][3:5]
         except KeyError:
             uvi, dvi = 0, 0
 
