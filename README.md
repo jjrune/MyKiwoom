@@ -5,6 +5,7 @@
 - 업데이터는 장마감 후 각 전략을 운영하기 위한 DB 갱신용입니다.
 
 2. tick 폴더내에는 초당 틱데이터 수집코드 및 백테스터 두가지, 백파인더가 포함되어 있습니다.
+
 - backtester.py
 - Total과 BackTester에 넘겨진 num 인자는 리스트이며 각 요소 또한 리스트입니다.
 - 그 값이 [0., 10., 1, 0.1] 일 때를 예를 들어 설명하면
@@ -38,7 +39,7 @@
 
 - backtesterm.py
 - 변수들의 값을 고정하여 백테스트할 수 있는 코드입니다.
-- 
+
 3. login 폴더는 버전처리와 자동로그인 설정 파일입니다.
 - versioupdater.bat는 버전 업그레이드용 파일입니다
 - autologin1.py는 user.txt 파일에서 설정한 첫번째 계정 자동로그인 설정이며
@@ -62,7 +63,9 @@
 - 코드 수정 후 오류 검사용 배치파일입니다.
 
 <설정방법>
+
 기본 환경은 miniconda 32bit python 3.9버전입니다.
+
 https://repo.anaconda.com/miniconda/Miniconda3-py39_4.10.3-Windows-x86.exe
 
 미니콘다 환경에서 추가로 설치할 라이브러리는 다음과 같습니다.
