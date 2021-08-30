@@ -958,7 +958,7 @@ class Worker:
                     self.dict_intg['단타최고수익금'] = tick_tsg
                 elif self.dict_intg['단타최고수익금'] < tick_tsg:
                     self.dict_intg['단타최고수익금'] = tick_tsg
-                elif self.dict_intg['단타최고수익금'] * 0.90 > tick_tsg:
+                elif self.dict_intg['단타최고수익금'] * 0.80 > tick_tsg:
                     self.windowQ.put([2, '단타 목표수익률 달성'])
                     self.dict_bool['단타목표수익률달성'] = True
                     self.teleQ.put('단타 목표수익률 달성')
