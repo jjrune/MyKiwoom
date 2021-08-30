@@ -67,6 +67,7 @@ class Worker:
             '장기투자금액': 0,
             '중기투자금액': 0,
             '단기투자금액': 0,
+            '단타최고수익금': 0,
 
             'TR수신횟수': 0,
             '주식체결수신횟수': 0,
@@ -951,10 +952,16 @@ class Worker:
         if not self.dict_bool['단타목표수익률달성']:
             psg = self.dict_df['거래목록'][self.dict_df['거래목록']['전략구분'] == '단타']['수익금'].sum()
             tsg = self.dict_df['잔고목록'][self.dict_df['잔고목록']['전략구분'] == '단타']['평가손익'].sum()
-            if self.dict_intg['단타투자금액'] * 0.02 < psg + tsg:
-                self.windowQ.put([2, '단타 목표수익률 달성'])
-                self.dict_bool['단타목표수익률달성'] = True
-                self.teleQ.put('단타 목표수익률 2% 달성')
+            tick_tsg = psg + tsg
+            if self.dict_intg['단타투자금액'] * 0.02 < tick_tsg:
+                if self.dict_intg['단타최고수익금'] == 0:
+                    self.dict_intg['단타최고수익금'] = tick_tsg
+                elif self.dict_intg['단타최고수익금'] < tick_tsg:
+                    self.dict_intg['단타최고수익금'] = tick_tsg
+                elif self.dict_intg['단타최고수익금'] * 0.90 > tick_tsg:
+                    self.windowQ.put([2, '단타 목표수익률 달성'])
+                    self.dict_bool['단타목표수익률달성'] = True
+                    self.teleQ.put('단타 목표수익률 달성')
 
     @thread_decorator
     def UpdateInfo(self):
