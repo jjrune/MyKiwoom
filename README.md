@@ -93,8 +93,8 @@
 7. 시스템설정탭으로 가서 텔레그램을 설정합니다.
 - ![화면_캡처_2021-08-26_195057](https://user-images.githubusercontent.com/78009194/131397719-f53e2355-149f-4495-b21b-0f91b7d38eb5.png)
 - 모니터 해상도가 작아서 안보이시는 분은
-- trader/window.py 194번째줄 self.setWindowFlags(Qt.FramelessWindowHint)
-- trader/window.py 663번째줄 self.ButtonClicked_4(2)
+- trader/window.py self.setWindowFlags(Qt.FramelessWindowHint)
+- trader/window.py self.ButtonClicked_4(2)
 - 두 부분을 주석처리하고 실행하시면 UI를 움직일 수 있습니다.
 - 해상도 작으신 분들은 나중에 설명할 "차트유형 변경" 및 "창크기변경" 버튼을 클릭하지 마십시오.
 - ui가 안보이는 영역으로 가버립니다. ㅎㅎ;;
