@@ -386,6 +386,12 @@ class Worker:
     def BuySell(self, gubun, code, name, c, oc):
         stg = gubun[:2]
         og = gubun[2:]
+
+        if og == '매수' and code in self.dict_buy.keys():
+            return
+        elif og == '매도' and code in self.dict_sell.keys():
+            return
+
         if og == '매수':
             if self.dict_intg[f'{stg}추정예수금'] < oc * c:
                 cond = (self.dict_df['체결목록']['주문구분'] == '시드부족') & (self.dict_df['체결목록'].index == code)
@@ -888,6 +894,8 @@ class Worker:
         if len(self.dict_df['잔고목록']) > 0:
             for code in self.dict_df['잔고목록'].index:
                 if self.dict_df['잔고목록']['전략구분'][code] == '단타':
+                    if code in self.dict_sell.keys():
+                        continue
                     c = self.dict_df['잔고목록']['현재가'][code]
                     oc = self.dict_df['잔고목록']['보유수량'][code]
                     name = self.dict_name[code]
