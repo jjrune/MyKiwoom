@@ -961,7 +961,8 @@ class Worker:
             psg = self.dict_df['거래목록'][self.dict_df['거래목록']['전략구분'] == '단타']['수익금'].sum()
             tsg = self.dict_df['잔고목록'][self.dict_df['잔고목록']['전략구분'] == '단타']['평가손익'].sum()
             tick_tsg = psg + tsg
-            if self.dict_intg['단타투자금액'] * 0.02 < tick_tsg:
+            goal_tsg = self.dict_intg['단타투자금액'] * 0.02
+            if goal_tsg < tick_tsg:
                 if self.dict_intg['단타최고수익금'] == 0:
                     self.dict_intg['단타최고수익금'] = tick_tsg
                 elif self.dict_intg['단타최고수익금'] < tick_tsg:
@@ -969,7 +970,10 @@ class Worker:
                 elif self.dict_intg['단타최고수익금'] * 0.80 > tick_tsg:
                     self.windowQ.put([2, '단타 목표수익률 달성'])
                     self.dict_bool['단타목표수익률달성'] = True
-                    self.teleQ.put('단타 목표수익률 달성')
+                    self.teleQ.put('단타 목표 수익률 달성')
+            elif -goal_tsg > tick_tsg:
+                self.dict_bool['단타목표수익률달성'] = True
+                self.teleQ.put('단타 손절 수익률 도달')
 
     @thread_decorator
     def UpdateInfo(self):
